@@ -1,7 +1,11 @@
+mod request;
+
 mod server {
     use std::io::prelude::*;
     use std::fs;
     use std::net::{TcpListener, TcpStream};
+
+    use crate::system::network;
 
     pub fn initialise_connection() {
         let listener = TcpListener::bind("127.0.0.1:8080").unwrap();
@@ -17,14 +21,7 @@ mod server {
         let mut buffer:[u8; 1024] = [0; 1024];
         stream.read(&mut buffer).unwrap();
 
-        let get = b"GET / HTTP/1.1\r\n";
-
-        let (status_line, filename) = if buffer.starts_with(get) {
-            ("HTTP/1.1 200 OK\r\n\r\n", "index.html")
-        } else {
-            ("HTTP/1.1 404 NOT FOUND\r\n\r\n", "404.html")
-        };
-
+        let (status_line, filename) = network::request::handle_request(&buffer);
         let contents = fs::read_to_string(filename).unwrap();
         let response = format!("{}{}", status_line, contents);
 
