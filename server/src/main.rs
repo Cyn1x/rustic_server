@@ -1,3 +1,7 @@
+mod system;
+
 fn main() {
-    println!("Hello, server!");
+    use system::application;
+
+    application::create_application();
 }
