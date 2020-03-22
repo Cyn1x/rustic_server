@@ -1,2 +1,1 @@
-pub mod application;
-mod network;
+pub mod network;

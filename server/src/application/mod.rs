@@ -1,7 +1,8 @@
 mod app {
     use crate::system;
-    use system::network;
     use crate::game;
+
+    use system::network;
 
     pub fn run() {
         game::create_game();
