@@ -3,6 +3,7 @@ mod app {
     use crate::game;
 
     use system::network;
+    use system::concurrency;
 
     pub fn run() {
         game::create_game();
