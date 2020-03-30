@@ -1,34 +1,43 @@
-mod request;
-
 mod server {
+    use std::env;
+    use std::net::{Ipv4Addr, SocketAddrV4, TcpListener, TcpStream};
     use std::io::prelude::*;
-    use std::fs;
-    use std::net::{TcpListener, TcpStream};
-
-    use crate::system::network;
+    use std::thread;
 
     pub fn initialise_connection() {
-        let listener = TcpListener::bind("127.0.0.1:8080").unwrap();
+        let args: Vec<String> = env::args().collect();
+        let port: &String = &args[1];
+        let loopback: Ipv4Addr = Ipv4Addr::new(127, 0, 0, 1);
+        let socket: SocketAddrV4 = SocketAddrV4::new(loopback, port.parse().unwrap());
+        let listener: TcpListener = TcpListener::bind(socket).unwrap();
 
+        println!("Rustic Server is listening on port {}", port);
+
+        handle_connection(listener);
+    }
+
+    fn handle_connection(listener: TcpListener) {
         for stream in listener.incoming() {
-            let stream = stream.unwrap();
-
-            handle_connection(stream);
+            match stream {
+                Ok(stream) => {
+                    println!("New client: {:?}", stream);
+                    thread::spawn(|| { handle_request(stream); });
+                }
+                Err(e) => println!("Unable to get the new client: {:?}", e),
+            }
         }
     }
 
-    fn handle_connection(mut stream: TcpStream) {
+    fn handle_request(mut stream: TcpStream) {
         let mut buffer:[u8; 1024] = [0; 1024];
-        stream.read(&mut buffer).unwrap();
 
-        let (status_line, filename) = network::request::handle_request(&buffer);
-        let contents = fs::read_to_string(filename).unwrap();
-        let response = format!("{}{}", status_line, contents);
+        loop {
+            stream.read(&mut buffer).unwrap();
+            stream.write(b"Received").unwrap();
+            stream.flush().unwrap();
 
-        stream.write(response.as_bytes()).unwrap();
-        stream.flush().unwrap();
-
-        println!("Request: {}", String::from_utf8_lossy(&buffer[..]));
+            println!("[Client]: {}", String::from_utf8_lossy(&buffer[..]));
+        }
     }
 }
 
