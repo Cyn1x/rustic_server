@@ -21,8 +21,22 @@
       <sourceFolder url="file://$MODULE_DIR$/server/src/concurrency/examples" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/server/src/concurrency/tests" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/server/src/concurrency/benches" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/server/lib/rs-network/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/server/lib/network/examples" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/server/lib/network/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/server/lib/network/benches" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/server/lib/rs-network/examples" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/server/lib/rs-network/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/server/lib/rs-network/benches" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/server/lib/rs-game/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/server/lib/rs-game/examples" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/server/lib/rs-game/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/server/lib/rs-game/benches" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/client/target" />
       <excludeFolder url="file://$MODULE_DIR$/server/concurrency/target" />
+      <excludeFolder url="file://$MODULE_DIR$/server/lib/network/target" />
+      <excludeFolder url="file://$MODULE_DIR$/server/lib/rs-game/target" />
+      <excludeFolder url="file://$MODULE_DIR$/server/lib/rs-network/target" />
       <excludeFolder url="file://$MODULE_DIR$/server/src/concurrency/target" />
       <excludeFolder url="file://$MODULE_DIR$/server/target" />
       <excludeFolder url="file://$MODULE_DIR$/target" />

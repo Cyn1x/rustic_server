@@ -1,5 +1,4 @@
-mod application;
-mod system;
-mod game;
+use rs_network;
+use rs_game;
 
-fn main() { application::run(); }
+fn main() {}

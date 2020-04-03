@@ -18,18 +18,15 @@ pub fn initialise_connection() {
     handle_connection(listener);
 }
 
-fn handle_connection(listener: TcpListener) {
-    const POOL_SIZE: usize = 10;
-    // let pool: ThreadPool = concurrency::ThreadPool::new(POOL_SIZE);
-
+fn handle_connection(listener: TcpListener){
     for stream in listener.incoming() {
         match stream {
             Ok(mut stream) => {
                 println!("New client: {:?}", stream);
                 stream.write("Connected to server.".as_ref()).unwrap();
-                // pool.execute( || {
-                //    request::handle_request(stream);
-                // });
+                thread::spawn(|| {
+                    request::handle_request(stream);
+                });
             }
             Err(e) => println!("Unable to get the new client: {:?}", e),
         }
