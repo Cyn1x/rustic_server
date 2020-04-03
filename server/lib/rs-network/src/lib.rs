@@ -6,6 +6,9 @@ use std::net::{Ipv4Addr, SocketAddrV4, TcpListener};
 use std::thread;
 use std::io::Write;
 
+use rs_concurrency;
+use rs_concurrency::ThreadPool;
+
 pub fn initialise_connection() {
     let args: Vec<String> = env::args().collect();
     let port: &String = &args[1];
@@ -19,12 +22,15 @@ pub fn initialise_connection() {
 }
 
 fn handle_connection(listener: TcpListener){
+    const POOL_SIZE: usize = 100;
+    let pool: ThreadPool = rs_concurrency::ThreadPool::new(POOL_SIZE);
+
     for stream in listener.incoming() {
         match stream {
             Ok(mut stream) => {
                 println!("New client: {:?}", stream);
-                stream.write("Connected to server.".as_ref()).unwrap();
-                thread::spawn(|| {
+
+                pool.execute( || {
                     request::handle_request(stream);
                 });
             }

@@ -1,6 +1,6 @@
 [workspace]
 
 members = [
-    "client",
-    "server"
+    "client/bin/rs-client",
+    "server/bin/rs-server"
 ]

@@ -1,7 +1,7 @@
-// pub fn handle_response(buffer: &[u8; 1024], request: &str) -> &str {
-//     ""
-// }
+pub fn handle_response<'a>(request: &str, handler: &'a rs_handler::Handler) -> &'a str {
+    handler.handle_request(request)
+}
 
-// fn process_response() {
-//
-// }
+fn process_response() {
+
+}

@@ -1,5 +1,5 @@
 [package]
-name = "rs-network"
+name = "server"
 version = "0.1.0"
 authors = ["Zac Vuković <contact@cyn1x.com>"]
 edition = "2018"
@@ -7,5 +7,6 @@ edition = "2018"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-"rs-concurrency" = { path = "../rs-concurrency" }
-"rs-handler" = { path = "../rs-handler" }
+"rs-handler" = { path = "../../lib/rs-handler" }
+"rs-network" = { path = "../../lib/rs-network" }
+"rs-game" = { path = "../rs-game" }
