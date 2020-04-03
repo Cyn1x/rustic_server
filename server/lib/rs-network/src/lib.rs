@@ -9,7 +9,7 @@ use std::io::Write;
 use rs_concurrency;
 use rs_concurrency::ThreadPool;
 
-pub fn initialise_connection() {
+pub fn initialise_connection(pool_size: usize) {
     let args: Vec<String> = env::args().collect();
     let port: &String = &args[1];
     let loopback: Ipv4Addr = Ipv4Addr::new(127, 0, 0, 1);
@@ -18,12 +18,11 @@ pub fn initialise_connection() {
 
     println!("Rustic Server is listening on port {}", port);
 
-    handle_connection(listener);
+    handle_connection(listener, pool_size);
 }
 
-fn handle_connection(listener: TcpListener){
-    const POOL_SIZE: usize = 100;
-    let pool: ThreadPool = rs_concurrency::ThreadPool::new(POOL_SIZE);
+fn handle_connection(listener: TcpListener, pool_size: usize){
+    let pool: ThreadPool = rs_concurrency::ThreadPool::new(pool_size);
 
     for stream in listener.incoming() {
         match stream {
