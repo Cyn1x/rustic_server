@@ -1,7 +1,12 @@
-mod app {
-    use crate::system;
+pub mod handler;
 
-    pub fn run() { system::network::create_connection(); }
+use crate::system;
+use crate::application::handler::Messenger;
+
+pub fn run() {
+    println!("Rustic Server initialised");
+
+    let messenger: Messenger = handler::Messenger::new();
+
+    system::network::initialise_connection();
 }
-
-pub fn create_application() { app::run(); }

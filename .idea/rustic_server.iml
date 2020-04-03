@@ -14,7 +14,16 @@
       <sourceFolder url="file://$MODULE_DIR$/client/examples" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/client/tests" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/client/benches" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/server/src/concurrency/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/server/concurrency/examples" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/server/concurrency/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/server/concurrency/benches" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/server/src/concurrency/examples" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/server/src/concurrency/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/server/src/concurrency/benches" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/client/target" />
+      <excludeFolder url="file://$MODULE_DIR$/server/concurrency/target" />
+      <excludeFolder url="file://$MODULE_DIR$/server/src/concurrency/target" />
       <excludeFolder url="file://$MODULE_DIR$/server/target" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
