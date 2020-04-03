@@ -1,6 +1,0 @@
-Welcome to Rustic Hangman!
-
-Please select an option from the menu below.
-1. Play
-2. Leaderboards
-3. Quit
