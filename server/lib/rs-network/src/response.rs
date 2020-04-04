@@ -1,7 +1,7 @@
-pub fn handle_response<'a>(request: &str, handler: &'a rs_handler::Handler) -> &'a str {
-    handler.handle_request(request)
-}
+use std::net::TcpStream;
+use std::io::Write;
 
-fn process_response() {
-
+pub fn handle_response(mut stream: &TcpStream, response: &[u8]) {
+    stream.write(response).unwrap();
+    stream.flush().unwrap();
 }

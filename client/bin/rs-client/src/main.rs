@@ -9,7 +9,7 @@ fn main() {
     let server = Ipv4Addr::new(127, 0, 0, 1);
     let socket = SocketAddrV4::new(server, port.parse().unwrap());
     let mut stream = TcpStream::connect(socket).unwrap();
-    let mut stream_buffer:[u8; 1024] = [0; 1024];
+    let mut peek_buffer:[u8; 1024] = [0; 1024];
     let mut input = String::new();
 
     loop {
@@ -17,7 +17,7 @@ fn main() {
             Ok(n) => {
                 stream.write(&input.as_bytes()).unwrap();
 
-                let incoming_bytes: usize = stream.peek(&mut stream_buffer).unwrap();
+                let incoming_bytes: usize = stream.peek(&mut peek_buffer).unwrap();
                 let mut buffer: Vec<u8> = vec![0; incoming_bytes];
 
                 stream.read(&mut buffer).unwrap();
