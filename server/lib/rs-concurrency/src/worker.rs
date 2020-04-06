@@ -6,6 +6,7 @@ use std::sync::Mutex;
 
 pub type Job = Box<dyn FnOnce() + Send + 'static>;
 
+#[allow(dead_code)]
 pub struct Worker {
     id: usize,
     thread: thread::JoinHandle<()>,

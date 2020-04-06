@@ -23,7 +23,7 @@ impl Handler {
         };
 
         for &b in buffer {
-            if !(((b >= 64 && b <= 91) || (b >= 97 && b <= 123)) || (b == 10 || b == 13)) {
+            if !(((b >= 64 && b <= 91) || (b >= 97 && b <= 123)) || buffer.len() > 2 && (b == 10 || b == 13)) {
                 return invalid_msg
             }
         }

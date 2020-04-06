@@ -7,6 +7,7 @@ use std::sync::Mutex;
 use worker::Worker;
 use worker::Job;
 
+#[allow(dead_code)]
 pub struct ThreadPool {
     workers: Vec<Worker>,
     sender: mpsc::Sender<Job>,
