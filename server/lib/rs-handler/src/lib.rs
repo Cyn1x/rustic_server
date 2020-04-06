@@ -3,7 +3,6 @@ use rs_game::Hangman;
 
 pub struct Handler {
     game: rs_game::Hangman
-
 }
 
 impl Handler {
@@ -15,20 +14,20 @@ impl Handler {
         }
     }
 
-    pub fn handle_request<'a>(&'a self, buffer: &'a Vec<u8>) -> &'a [u8] {
+    pub fn handle_request<'a>(&'a mut self, buffer: &'a Vec<u8>) -> &'a [u8] {
         let start_msg = b"START GAME";
         let invalid_msg = b"Invalid input detected";
 
         if buffer.starts_with(start_msg) {
-            return self.game.get_hint();
+            return self.game.get_hint()
         };
 
-        for &x in buffer {
-            if !(((x > 64 && x < 91) || (x > 97 && x < 123)) || (x == 10 || x == 13)) {
+        for &b in buffer {
+            if !(((b >= 64 && b <= 91) || (b >= 97 && b <= 123)) || (b == 10 || b == 13)) {
                 return invalid_msg
             }
         }
 
-        buffer
+        self.game.verify_guess(buffer)
     }
 }

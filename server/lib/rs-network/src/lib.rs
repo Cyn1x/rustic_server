@@ -3,8 +3,6 @@ mod response;
 
 use std::env;
 use std::net::{Ipv4Addr, SocketAddrV4, TcpListener};
-use std::thread;
-use std::io::Write;
 
 use rs_concurrency;
 use rs_concurrency::ThreadPool;
@@ -26,7 +24,7 @@ fn handle_connection(listener: TcpListener, pool_size: usize){
 
     for stream in listener.incoming() {
         match stream {
-            Ok(mut stream) => {
+            Ok(stream) => {
                 println!("New client: {:?}", stream);
 
                 pool.execute( || {
@@ -36,5 +34,4 @@ fn handle_connection(listener: TcpListener, pool_size: usize){
             Err(e) => println!("Unable to get the new client: {:?}", e),
         }
     }
-
 }
