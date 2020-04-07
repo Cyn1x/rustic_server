@@ -13,8 +13,7 @@ impl Hangman {
     pub fn new() -> Hangman {
         let secret_word: (Vec<u8>, Vec<u8>) = self::Hangman::create_word();
         let server_word: Vec<u8> = secret_word.0;
-        let mut client_word: Vec<u8> = secret_word.1;
-        self::Hangman::append_crlf(&mut client_word);
+        let client_word: Vec<u8> = secret_word.1;
 
         let (char_guesses, word_guesses) = (0, 0);
 
@@ -38,11 +37,9 @@ impl Hangman {
         (server_word, client_word)
     }
 
-    pub fn verify_guess(&mut self, buffer: &Vec<u8>) -> &Vec<u8> {
-        let mut word = buffer.split(|&b | b == 13).next().unwrap().to_vec();
-
-        if word.len() > 1 { self.handle_word(&mut word) }
-        else { self.handle_char(&word[0]); }
+    pub fn verify_guess(&mut self, buffer: &mut Vec<u8>) -> &Vec<u8> {
+        if buffer.len() > 1 { self.handle_word(buffer) }
+        else { self.handle_char(&buffer[0]); }
 
         if self.game_over() { return self.construct_summary() }
 
@@ -70,13 +67,13 @@ impl Hangman {
     fn handle_word(&mut self, buffer: &mut Vec<u8>) {
         let client_word: &mut Vec<u8> = &mut self.client_word;
 
-        if self.server_word.eq(buffer) { client_word[..self.server_word.len()].clone_from_slice(&buffer[..]); }
+        if self.server_word.eq(buffer) { client_word.clone_from_slice(&buffer[..]); }
 
         self.game_state.word_guesses += 1;
     }
 
     fn game_over(&self) -> bool {
-        self.server_word[..].eq(&self.client_word[..self.server_word.len()])
+        self.server_word.eq(&self.client_word)
     }
 
     fn construct_summary(&mut self) -> &Vec<u8> {
@@ -90,7 +87,7 @@ impl Hangman {
     }
 
     fn calculate_score(&self) -> i32 {
-        10 * (self.client_word[..self.server_word.len()].len() as i32) - 2 * (self.game_state.char_guesses) - (self.game_state.word_guesses)
+        10 * (self.client_word.len() as i32) - 2 * (self.game_state.char_guesses) - (self.game_state.word_guesses)
     }
 
     pub fn get_hint(&self) -> &Vec<u8> {

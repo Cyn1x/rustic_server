@@ -1,7 +1,7 @@
 use rs_network;
 
 fn main() {
-    const MAXIMUM_CONCURRENT_USERS: usize = 100;
+    println!("[Server]: Rustic Server initialised");
 
-    rs_network::initialise_connection(MAXIMUM_CONCURRENT_USERS);
+    rs_network::initialise_connection();
 }

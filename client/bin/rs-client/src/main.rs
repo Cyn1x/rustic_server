@@ -12,12 +12,12 @@ fn main() {
 
     stream.write(b"START GAME").unwrap();
 
-    server_recv(&mut stream);
+    handle_request(&mut stream);
 
     stream.shutdown(Shutdown::Both).expect("Shutdown call failed");
 }
 
-fn server_recv(stream: &mut TcpStream) {
+fn handle_request(stream: &mut TcpStream) {
     let mut peek_buffer:[u8; 1024] = [0; 1024];
 
     loop {
@@ -32,11 +32,11 @@ fn server_recv(stream: &mut TcpStream) {
 
         if server_msg.contains("GAME OVER") { break; }
 
-        server_send(stream);
+        handle_response(stream);
     }
 }
 
-fn server_send(stream: &mut TcpStream) {
+fn handle_response(stream: &mut TcpStream) {
     let mut input = String::new();
 
     match io::stdin().read_line(&mut input) {

@@ -17,17 +17,18 @@ impl Handler {
     pub fn handle_request<'a>(&'a mut self, buffer: &'a Vec<u8>) -> &'a [u8] {
         let start_msg = b"START GAME";
         let invalid_msg = b"Invalid input detected";
+        let mut split_buffer: Vec<u8> = buffer.split(|&b | b == 10).next().unwrap().to_vec();
 
-        if buffer.starts_with(start_msg) {
+        if split_buffer.starts_with(start_msg) {
             return self.game.get_hint()
         };
 
-        for &b in buffer {
-            if !(((b >= 64 && b <= 91) || (b >= 97 && b <= 123)) || buffer.len() > 2 && (b == 10 || b == 13)) {
+        for &b in &split_buffer {
+            if !((b >= 64 && b <= 91) || (b >= 97 && b <= 123)) {
                 return invalid_msg
             }
         }
 
-        self.game.verify_guess(buffer)
+        self.game.verify_guess(&mut split_buffer)
     }
 }
