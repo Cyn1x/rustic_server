@@ -34,7 +34,7 @@ impl Hangman {
     }
 
     pub fn create_word() -> (Vec<u8>, Vec<u8>) {
-        let mut file = File::open("server/var/words.txt").expect("File not found");
+        let mut file: File = File::open("server/var/words.txt").expect("File not found");
         let mut contents: String = String::new();
 
         file.read_to_string(&mut contents).unwrap();
@@ -47,9 +47,9 @@ impl Hangman {
     }
 
     pub fn choose_word(contents: &String) -> String {
-        let lines = contents.lines().count();
+        let lines: usize = contents.lines().count();
         let mut secret_word: String = String::new();
-        let random_number = rand::thread_rng().gen_range(0, lines);
+        let random_number: usize = rand::thread_rng().gen_range(0, lines);
 
         contents.lines().into_iter().enumerate().for_each( | word | {
             if word.0 == random_number {
