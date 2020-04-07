@@ -37,18 +37,13 @@ impl Hangman {
         (server_word, client_word)
     }
 
-    pub fn verify_guess(&mut self, buffer: &mut Vec<u8>) -> &Vec<u8> {
+    pub fn verify_guess(&mut self, buffer: &Vec<u8>) -> &Vec<u8> {
         if buffer.len() > 1 { self.handle_word(buffer) }
         else { self.handle_char(&buffer[0]); }
 
         if self.game_over() { return self.construct_summary() }
 
         &self.client_word
-    }
-
-    fn append_crlf(buffer: &mut Vec<u8>) {
-        buffer.push(13);
-        buffer.push(10);
     }
 
     fn handle_char(&mut self, byte: &u8) {
@@ -64,7 +59,7 @@ impl Hangman {
         });
     }
 
-    fn handle_word(&mut self, buffer: &mut Vec<u8>) {
+    fn handle_word(&mut self, buffer: &Vec<u8>) {
         let client_word: &mut Vec<u8> = &mut self.client_word;
 
         if self.server_word.eq(buffer) { client_word.clone_from_slice(&buffer[..]); }
@@ -79,7 +74,6 @@ impl Hangman {
     fn construct_summary(&mut self) -> &Vec<u8> {
         let score: i32 = self.calculate_score();
         let mut client_summary = String::from(format!("\r\n{} \r\nGAME OVER", score)).into_bytes();
-        self::Hangman::append_crlf(&mut client_summary);
 
         &self.client_word.append(client_summary.as_mut());
 

@@ -1,7 +1,8 @@
 use std::env;
-use std::net::{Ipv4Addr, SocketAddrV4, TcpStream, Shutdown};
+use std::net::{TcpStream, Shutdown};
 use std::io;
 use std::io::{Write, Read};
+use std::borrow::Cow;
 
 fn main() {
     let args: Vec<String> = env::args().collect();
@@ -26,7 +27,7 @@ fn handle_request(stream: &mut TcpStream) {
 
         stream.read(&mut buffer).unwrap();
 
-        let server_msg = String::from_utf8_lossy(&buffer[..]);
+        let server_msg: Cow<str> = String::from_utf8_lossy(&buffer[..]);
 
         println!("[Server]: {}\n", server_msg);
 
@@ -37,10 +38,10 @@ fn handle_request(stream: &mut TcpStream) {
 }
 
 fn handle_response(stream: &mut TcpStream) {
-    let mut input = String::new();
+    let mut input: String = String::new();
 
     match io::stdin().read_line(&mut input) {
-        Ok(n) => {
+        Ok(_n) => {
             stream.write(&input.as_bytes()).unwrap();
         }
         Err(error) => println!("error: {}", error),

@@ -35,4 +35,6 @@ fn handle_connection(listener: &TcpListener){
             Err(e) => println!("[Server]: Unable to get the new client: {:?}", e),
         }
     }
+
+    println!("[Server]: Rustic Server is shutting down.");
 }
