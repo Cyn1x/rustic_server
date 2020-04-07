@@ -1,3 +1,7 @@
+use std::fs::File;
+use std::io::prelude::*;
+use rand::Rng;
+
 pub struct Hangman {
     server_word: Vec<u8>,
     client_word: Vec<u8>,
@@ -30,11 +34,30 @@ impl Hangman {
     }
 
     pub fn create_word() -> (Vec<u8>, Vec<u8>) {
-        let secret_word: String = String::from("apple");
+        let mut file = File::open("server/var/words.txt").expect("File not found");
+        let mut contents: String = String::new();
+
+        file.read_to_string(&mut contents).unwrap();
+
+        let secret_word: String = self::Hangman::choose_word(&contents);
         let server_word: Vec<u8> = secret_word.into_bytes();
         let client_word: Vec<u8> = vec![95; server_word.len()];
 
         (server_word, client_word)
+    }
+
+    pub fn choose_word(contents: &String) -> String {
+        let lines = contents.lines().count();
+        let mut secret_word: String = String::new();
+        let random_number = rand::thread_rng().gen_range(0, lines);
+
+        contents.lines().into_iter().enumerate().for_each( | word | {
+            if word.0 == random_number {
+                secret_word.push_str(word.1)
+            }
+        });
+
+        secret_word
     }
 
     pub fn verify_guess(&mut self, buffer: &Vec<u8>) -> &Vec<u8> {
