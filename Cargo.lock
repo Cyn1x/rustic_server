@@ -96,8 +96,6 @@ dependencies = [
 name = "server"
 version = "0.1.0"
 dependencies = [
- "rs-game 0.1.0",
- "rs-handler 0.1.0",
  "rs-network 0.1.0",
 ]
 

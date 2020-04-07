@@ -6,6 +6,8 @@ use rs_handler::Handler;
 
 use super::response;
 
+/// Handles a client by sending the incoming transmission to `rs-handler`, then awaits the
+/// response to transmit back to the client.
 pub fn handle_request(mut stream: TcpStream) {
     let client: u16 = stream.peer_addr().unwrap().port();
     let mut peek_buffer: [u8; 1024] = [0; 1024];

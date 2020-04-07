@@ -1,9 +1,15 @@
+//! Rustic Client
+//!
+//! `rs-client` is the entry point to the program.
+
 use std::env;
 use std::net::{TcpStream, Shutdown};
 use std::io;
 use std::io::{Write, Read};
 use std::borrow::Cow;
 
+/// Initialises the client by connecting to the server. The function then calls another
+/// function to handle incoming and outgoing requests.
 fn main() {
     let args: Vec<String> = env::args().collect();
     let host: &String = &args[1];
@@ -18,6 +24,7 @@ fn main() {
     stream.shutdown(Shutdown::Both).expect("Shutdown call failed");
 }
 
+/// Handles incoming transmissions and calls a function to transmit data to the server.
 fn handle_request(stream: &mut TcpStream) {
     let mut peek_buffer:[u8; 1024] = [0; 1024];
 
@@ -37,6 +44,7 @@ fn handle_request(stream: &mut TcpStream) {
     }
 }
 
+/// Reads user input and transmits it to the server.
 fn handle_response(stream: &mut TcpStream) {
     let mut input: String = String::new();
 

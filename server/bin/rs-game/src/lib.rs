@@ -1,19 +1,41 @@
+//! Rustic Server Hangman
+//!
+//! `rs-hangman` initialises Hangman game and processes the state at each
+//! stage of the game.
+
 use std::fs::File;
 use std::io::prelude::*;
 use rand::Rng;
 
+/// The game data
 pub struct Hangman {
     server_word: Vec<u8>,
     client_word: Vec<u8>,
     game_state: State
 }
 
+/// The game state data
 struct State {
     char_guesses: i32,
     word_guesses: i32
 }
 
 impl Hangman {
+    /// Returns a game of Hangman with a secret word.
+    ///
+    /// # Arguments
+    ///
+    /// * `server_word` - An 8-bit unsigned integer vector that contains the secret word
+    /// * `client_word` - An 8-bit unsigned inteneger vector that contains the hidden word
+    /// * `game_state`  - Contains the gane state data
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// // Example structure instantiation.
+    /// use rs_game::Hangman;
+    /// let game = Hangman::new();
+    /// ```
     pub fn new() -> Hangman {
         let secret_word: (Vec<u8>, Vec<u8>) = self::Hangman::create_word();
         let server_word: Vec<u8> = secret_word.0;
@@ -33,6 +55,9 @@ impl Hangman {
         }
     }
 
+    /// Streams the data from the file that contains a list of words. This function sets up the
+    /// file access and calls another function to choose which word to store. Returns the
+    /// server word and client word vectors.
     pub fn create_word() -> (Vec<u8>, Vec<u8>) {
         let mut file: File = File::open("server/var/words.txt").expect("File not found");
         let mut contents: String = String::new();
@@ -46,6 +71,7 @@ impl Hangman {
         (server_word, client_word)
     }
 
+    /// Uses a random generator to choose a random word in the file. Returns the secret word.
     pub fn choose_word(contents: &String) -> String {
         let lines: usize = contents.lines().count();
         let mut secret_word: String = String::new();
@@ -60,6 +86,8 @@ impl Hangman {
         secret_word
     }
 
+    /// Determins whether the guess is a char or word guess. The appropriate functions handle
+    /// each case. Returns the client word.
     pub fn verify_guess(&mut self, buffer: &Vec<u8>) -> &Vec<u8> {
         if buffer.len() > 1 { self.handle_word(buffer) }
         else { self.handle_char(&buffer[0]); }
@@ -69,6 +97,9 @@ impl Hangman {
         &self.client_word
     }
 
+    /// Checks whether the guessed byte appears in any index in the server word vector. If the
+    /// guess is correct, the byte gets placed in the appropriate position in the client vector,
+    /// overwriting the underscore.
     fn handle_char(&mut self, byte: &u8) {
         let server_word: &Vec<u8> = &self.server_word;
         let client_word: &mut Vec<u8> = &mut self.client_word;
@@ -82,6 +113,8 @@ impl Hangman {
         });
     }
 
+    /// Checks whether the guessed word equals the server word vector. If the guess is correct,
+    /// the buffer gets cloned to the client vector.
     fn handle_word(&mut self, buffer: &Vec<u8>) {
         let client_word: &mut Vec<u8> = &mut self.client_word;
 
@@ -90,10 +123,14 @@ impl Hangman {
         self.game_state.word_guesses += 1;
     }
 
+    /// Checks whether the game is over by comparing the client and server word vectors.
+    /// Returns true or false.
     fn game_over(&self) -> bool {
         self.server_word.eq(&self.client_word)
     }
 
+    /// Constructs a summary for the client by concatenating a message with the score, and appends
+    /// this to the client word vector. Returns the client word vector.
     fn construct_summary(&mut self) -> &Vec<u8> {
         let score: i32 = self.calculate_score();
         let mut client_summary = String::from(format!("\r\n{} \r\nGAME OVER", score)).into_bytes();
@@ -103,10 +140,13 @@ impl Hangman {
         &self.client_word
     }
 
+    /// Calculates the final score with the formula:
+    ///  `10 * (secret word length) - 2 * (number of char guesses) - (number of word guesses)`
     fn calculate_score(&self) -> i32 {
         10 * (self.client_word.len() as i32) - 2 * (self.game_state.char_guesses) - (self.game_state.word_guesses)
     }
 
+    /// Returns the client word.
     pub fn get_hint(&self) -> &Vec<u8> {
         &self.client_word
     }

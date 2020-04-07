@@ -1,3 +1,8 @@
+//! Rustic Server Hangman
+//!
+//! `rs-concurrency` initialises a thread pool that manages all threads in the pool. This was
+//! implemented from the official Rust book.
+
 mod worker;
 
 use std::sync::mpsc;

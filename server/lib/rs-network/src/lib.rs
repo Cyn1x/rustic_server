@@ -1,3 +1,7 @@
+//! Rustic Server Network
+//!
+//! `rs-network` initialises the server and listens for incoming requests,
+//! then processes them.
 mod request;
 mod response;
 
@@ -7,6 +11,7 @@ use std::net::{Ipv4Addr, SocketAddrV4, TcpListener};
 use rs_concurrency;
 use rs_concurrency::ThreadPool;
 
+/// Initialises the server listener and calls another function to handle the listener.
 pub fn initialise_connection() {
     let args: Vec<String> = env::args().collect();
     let port: &String = &args[1];
@@ -19,6 +24,9 @@ pub fn initialise_connection() {
     handle_connection(&listener);
 }
 
+/// Listens for incoming requests then dispatches them for processing. The `rs-concurrency` crate
+/// concurrently handles multiple requests. The thread pool has a maximum limit of 100
+/// concurrent requests at a time.
 fn handle_connection(listener: &TcpListener){
     let pool_size: usize = 100;
     let pool: ThreadPool = rs_concurrency::ThreadPool::new(pool_size);
