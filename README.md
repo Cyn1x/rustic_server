@@ -28,12 +28,7 @@ ___
 
 ### Building
 
-#### First Option
-1. `git clone https://github.com/Cyn1x/rustic_server.git`
-2. `cd rustic_server`
-3. `cargo build` to obtain the required dependencies and build all crates.
-
-#### Second Option
+- If you have to authenticate with a proxy server to access the internet, you must also do this to obtain the required dependencies.
 
 - GUI
 1. Download the `.zip` from [my repository](https://github.com/Cyn1x/rustic_server)
@@ -76,7 +71,7 @@ ___
 * [x] Implement [Hangman](https://en.wikipedia.org/wiki/Hangman_(game) for manual testing
 * [x] Shell script to start the server on a given port
 * [x] Shell script with arguments to start client and connect to a host on a specific port
-* [ ] Error handling
+* [x] Error handling
 * [ ] Client user interface
 * [ ] Documentation and comments
 
