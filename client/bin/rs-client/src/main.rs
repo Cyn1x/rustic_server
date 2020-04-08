@@ -18,7 +18,7 @@ fn main() {
     let mut stream = TcpStream::connect(server)
         .expect("Error connecting to server");
 
-    stream.write(b"START GAME").expect("Error writing to stream");
+    stream.write(b"START GAME\n").expect("Error writing to stream");
 
     handle_request(&mut stream);
 

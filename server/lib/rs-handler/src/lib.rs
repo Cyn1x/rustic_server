@@ -63,8 +63,8 @@ impl Handler {
     /// whether the client has requests a new game, or sent a valid request. The `CRLF` or `NL`
     /// bytes get stripped from the buffer. Returns the response.
     pub fn handle_request<'a>(&'a mut self, buffer: &'a Vec<u8>) -> &'a [u8] {
-        let start_msg = b"START GAME";
-        let invalid_msg = b"Invalid input detected\r\n";
+        let start_msg = b"START GAME\n";
+        let invalid_msg = b"Invalid input detected\n";
 
         if self.request_empty(buffer) { return invalid_msg }
 
@@ -82,13 +82,7 @@ impl Handler {
     /// Assigns the response to `self` and returns the vector from `self`, containing the response
     fn handle_response(&mut self, response: Vec<u8>) -> &Vec<u8> {
         self.response = response;
-        self.append_crlf();
-        &self.response
-    }
-
-    /// Appends a `CRLF` to each outgoing transmission
-    fn append_crlf(&mut self) {
-        self.response.push(13);
         self.response.push(10);
+        &self.response
     }
 }

@@ -133,7 +133,7 @@ impl Hangman {
     /// this to the client word vector. Returns the client word vector.
     fn construct_summary(&mut self) -> &Vec<u8> {
         let score: i32 = self.calculate_score();
-        let mut client_summary = String::from(format!("\r\n{} \r\nGAME OVER", score))
+        let mut client_summary = String::from(format!("\n{} \nGAME OVER\n", score))
             .into_bytes();
 
         &self.client_word.append(client_summary.as_mut());
