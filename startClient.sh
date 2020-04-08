@@ -2,7 +2,7 @@
 #
 # Script to run the Rustic Client
 
-#
+# Check if the required number of arguments have been entered
 if [[ $# -ne 2 ]]; then
   echo "Error: Invalid argument. $# argument(s) entered; 2 arguments required"
   echo "Usage: Specify the hostname and port number: ./startServer [hostname] [port]"

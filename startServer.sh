@@ -2,7 +2,7 @@
 #
 # Script to run the Rustic Server
 
-#
+# Check if the required number of arguments have been entered
 if [[ $# -ne 1 ]]; then
   echo "Error: Invalid argument. $# argument(s) entered; 1 argument required"
   echo "Usage: Specify the port number: ./startServer [port]"
