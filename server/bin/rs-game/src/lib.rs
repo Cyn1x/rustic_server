@@ -103,31 +103,30 @@ impl Hangman {
     fn handle_char(&mut self, byte: &u8) {
         let server_word: &Vec<u8> = &self.server_word;
         let client_word: &mut Vec<u8> = &mut self.client_word;
-        let char_guesses = &mut self.game_state.char_guesses;
 
         server_word.iter().enumerate().for_each( | (i, &b) | {
             if b.eq_ignore_ascii_case(byte) && client_word[i] == 95 {
                 client_word[i] = b;
-                *char_guesses += 1;
             }
         });
+
+        self.game_state.char_guesses += 1;
     }
 
-    /// Checks whether the guessed word equals the server word vector. If the guess is correct,
-    /// the buffer gets cloned to the client vector.
+    /// Checks whether the guessed word equals the server word vector. The buffer transforms to
+    /// ASCII lower case. If the guess is correct, the buffer gets cloned to the client vector.
     fn handle_word(&mut self, buffer: &Vec<u8>) {
-        let client_word: &mut Vec<u8> = &mut self.client_word;
+        let buffer: Vec<u8> = buffer.iter()
+            .map( | b | b.to_ascii_lowercase()).collect();
 
-        if self.server_word.eq(buffer) { client_word.clone_from_slice(&buffer[..]); }
+        if self.server_word.eq(&buffer) { self.client_word.clone_from_slice(&buffer[..]); }
 
         self.game_state.word_guesses += 1;
     }
 
     /// Checks whether the game is over by comparing the client and server word vectors.
     /// Returns true or false.
-    fn game_over(&self) -> bool {
-        self.server_word.eq(&self.client_word)
-    }
+    fn game_over(&self) -> bool { self.server_word.eq(&self.client_word) }
 
     /// Constructs a summary for the client by concatenating a message with the score, and appends
     /// this to the client word vector. Returns the client word vector.
