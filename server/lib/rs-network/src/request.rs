@@ -14,10 +14,11 @@ pub fn handle_request(mut stream: TcpStream) {
     let mut handler: Handler = rs_handler::Handler::new();
 
     loop {
-        let incoming_bytes: usize = stream.peek(&mut peek_buffer).unwrap();
+        let incoming_bytes: usize = stream.peek(&mut peek_buffer)
+            .expect("Error peeking incoming bytes");
         let mut buffer: Vec<u8> = vec![0; incoming_bytes];
 
-        stream.read(&mut buffer).unwrap();
+        stream.read(&mut buffer).expect("Error reading from stream");
 
         let response: &[u8] = handler.handle_request(&buffer);
         response::handle_response(&stream, response);

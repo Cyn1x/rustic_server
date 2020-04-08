@@ -15,9 +15,10 @@ fn main() {
     let host: &String = &args[1];
     let port: &String = &args[2];
     let server: String = String::from(format!("{}:{}", host, port));
-    let mut stream = TcpStream::connect(server).unwrap();
+    let mut stream = TcpStream::connect(server)
+        .expect("Error connecting to server");
 
-    stream.write(b"START GAME").unwrap();
+    stream.write(b"START GAME").expect("Error writing to stream");
 
     handle_request(&mut stream);
 
@@ -29,10 +30,11 @@ fn handle_request(stream: &mut TcpStream) {
     let mut peek_buffer:[u8; 1024] = [0; 1024];
 
     loop {
-        let incoming_bytes: usize = stream.peek(&mut peek_buffer).unwrap();
+        let incoming_bytes: usize = stream.peek(&mut peek_buffer)
+            .expect("Error peeking incoming bytes");
         let mut buffer: Vec<u8> = vec![0; incoming_bytes];
 
-        stream.read(&mut buffer).unwrap();
+        stream.read(&mut buffer).expect("Error reading from stream");
 
         let server_msg: Cow<str> = String::from_utf8_lossy(&buffer[..]);
 
@@ -53,7 +55,7 @@ fn handle_response(stream: &mut TcpStream) {
         match io::stdin().read_line(&mut input) {
             Ok(_n) => {
                 if valid_response(&input) {
-                    stream.write(&input.as_bytes()).unwrap();
+                    stream.write(&input.as_bytes()).expect("Error writing to stream");
                     break;
                 }
             }

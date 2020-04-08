@@ -62,7 +62,8 @@ impl Hangman {
         let mut file: File = File::open("server/var/words.txt").expect("File not found");
         let mut contents: String = String::new();
 
-        file.read_to_string(&mut contents).unwrap();
+        file.read_to_string(&mut contents)
+            .expect("Error streaming file contents to String buffer");
 
         let secret_word: String = self::Hangman::choose_word(&contents);
         let server_word: Vec<u8> = secret_word.into_bytes();
@@ -132,7 +133,8 @@ impl Hangman {
     /// this to the client word vector. Returns the client word vector.
     fn construct_summary(&mut self) -> &Vec<u8> {
         let score: i32 = self.calculate_score();
-        let mut client_summary = String::from(format!("\r\n{} \r\nGAME OVER", score)).into_bytes();
+        let mut client_summary = String::from(format!("\r\n{} \r\nGAME OVER", score))
+            .into_bytes();
 
         &self.client_word.append(client_summary.as_mut());
 
@@ -142,7 +144,8 @@ impl Hangman {
     /// Calculates the final score with the formula:
     ///  `10 * (secret word length) - 2 * (number of char guesses) - (number of word guesses)`
     fn calculate_score(&self) -> i32 {
-        10 * (self.client_word.len() as i32) - 2 * (self.game_state.char_guesses) - (self.game_state.word_guesses)
+        10 * (self.client_word.len() as i32) - 2 * (self.game_state.char_guesses)
+            - (self.game_state.word_guesses)
     }
 
     /// Returns the client word.

@@ -70,7 +70,8 @@ impl Handler {
 
         if buffer.starts_with(start_msg) { return self.new_game() }
 
-        let split_buffer: Vec<u8> = buffer.split(|&b | b == 13 || b == 10).next().unwrap().to_vec();
+        let split_buffer: Vec<u8> = buffer.split(|&b | b == 13 || b == 10)
+            .next().unwrap().to_vec();
 
         if self.request_invalid(&split_buffer) { return invalid_msg }
 
