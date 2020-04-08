@@ -44,14 +44,31 @@ fn handle_request(stream: &mut TcpStream) {
     }
 }
 
-/// Reads user input and transmits it to the server.
+/// Reads user input and transmits it to the server. The loop will only break when valid input
+/// gets entered.
 fn handle_response(stream: &mut TcpStream) {
-    let mut input: String = String::new();
+    loop {
+        let mut input: String = String::new();
 
-    match io::stdin().read_line(&mut input) {
-        Ok(_n) => {
-            stream.write(&input.as_bytes()).unwrap();
+        match io::stdin().read_line(&mut input) {
+            Ok(_n) => {
+                if valid_response(&input) {
+                    stream.write(&input.as_bytes()).unwrap();
+                    break;
+                }
+            }
+            Err(e) => println!("error: {}", e),
         }
-        Err(error) => println!("error: {}", error),
     }
+}
+
+/// Determines whether the input is a valid char. Returns true or false
+fn valid_response(input: &String) -> bool {
+    for c in input.chars() {
+        if !((((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')) || (c == '\r' || c =='\n')) && input.len() > 2) {
+            println!("[Client]: Invalid input. Only characters A-Z and a-z are permitted.");
+            return false
+        }
+    }
+    true
 }
