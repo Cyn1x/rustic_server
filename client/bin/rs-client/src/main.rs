@@ -67,7 +67,7 @@ fn handle_response(stream: &mut TcpStream) {
 /// Determines whether the input is a valid char. Returns true or false
 fn valid_response(input: &String) -> bool {
     for c in input.chars() {
-        if !((((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')) || (c == '\r' || c =='\n')) && input.len() > 2) {
+        if !((((c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z')) || (c == '\r' || c =='\n')) && input.len() > 1) {
             println!("[Client]: Invalid input. Only characters A-Z and a-z are permitted.");
             return false
         }

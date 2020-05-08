@@ -57,6 +57,10 @@
       <sourceFolder url="file://$MODULE_DIR$/server/lib/rs-handler/examples" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/server/lib/rs-handler/tests" isTestSource="true" />
       <sourceFolder url="file://$MODULE_DIR$/server/lib/rs-handler/benches" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/server/lib/rs-cryptography/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/server/lib/rs-cryptography/examples" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/server/lib/rs-cryptography/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/server/lib/rs-cryptography/benches" isTestSource="true" />
       <excludeFolder url="file://$MODULE_DIR$/client/bin/rs-client/target" />
       <excludeFolder url="file://$MODULE_DIR$/client/target" />
       <excludeFolder url="file://$MODULE_DIR$/server/bin/rs-game/target" />
@@ -66,6 +70,7 @@
       <excludeFolder url="file://$MODULE_DIR$/server/concurrency/target" />
       <excludeFolder url="file://$MODULE_DIR$/server/lib/network/target" />
       <excludeFolder url="file://$MODULE_DIR$/server/lib/rs-concurrency/target" />
+      <excludeFolder url="file://$MODULE_DIR$/server/lib/rs-cryptography/target" />
       <excludeFolder url="file://$MODULE_DIR$/server/lib/rs-game/target" />
       <excludeFolder url="file://$MODULE_DIR$/server/lib/rs-handler/target" />
       <excludeFolder url="file://$MODULE_DIR$/server/lib/rs-network/target" />

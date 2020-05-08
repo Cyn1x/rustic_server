@@ -73,7 +73,7 @@ ___
 * [x] Shell script with arguments to start client and connect to a host on a specific port
 * [x] Error handling
 * [ ] Client user interface
-* [ ] Documentation and comments
+* [x] Documentation and comments
 
 ### Credits
 
