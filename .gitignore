@@ -3,3 +3,6 @@
 .idea/usage.statistics.xml
 .idea/tasks.xml
 .idea/shelf
+
+*.pem
+
