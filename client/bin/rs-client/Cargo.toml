@@ -8,3 +8,5 @@ edition = "2018"
 
 [dependencies]
 openssl = "0.10.29"
+
+"rs-cryptography" = { path ="../../../server/lib/rs-cryptography" }

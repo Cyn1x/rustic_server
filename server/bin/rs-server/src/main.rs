@@ -5,7 +5,6 @@
 use rs_network;
 
 /// Initialises the network to accept incoming connections.
-///
 fn main() {
     println!("[Server]: Rustic Server initialised");
 

@@ -1,5 +1,5 @@
 use std::net::TcpStream;
-use std::io::{Read, Write};
+use std::io::Read;
 use std::borrow::Cow;
 
 use openssl::ssl::SslStream;
@@ -10,7 +10,9 @@ use super::response;
 /// Handles a client by sending the incoming transmission to `rs-handler`, then awaits the
 /// response to transmit back to the client.
 pub fn handle_request(mut stream: SslStream<TcpStream>) {
-    let client: u16 = stream.get_mut().peer_addr().unwrap().port();
+    let client: u16 = stream.get_ref().peer_addr()
+        .expect("Error returning client socket address.")
+        .port();
     let mut peek_buffer: [u8; 1024] = [0; 1024];
     let mut handler: Handler = rs_handler::Handler::new();
 
@@ -26,6 +28,7 @@ pub fn handle_request(mut stream: SslStream<TcpStream>) {
 
         let server_msg: Cow<str> = String::from_utf8_lossy(&response[..]);
         let client_msg: Cow<str> = String::from_utf8_lossy(&buffer[..]);
+
         println!("[Client {:?}]: {}", client, client_msg);
 
         if server_msg.contains("GAME OVER") { break; }

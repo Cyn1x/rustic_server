@@ -5,7 +5,11 @@
 
 use std::fs::File;
 use std::io::prelude::*;
+
 use rand::Rng;
+
+use rs_cryptography;
+use rs_cryptography::aes_handler::AES;
 
 /// The game data
 pub struct Hangman {
@@ -59,13 +63,15 @@ impl Hangman {
     /// file access and calls another function to choose which word to store. Returns the
     /// server word and client word vectors.
     pub fn create_word() -> (Vec<u8>, Vec<u8>) {
-        let mut file: File = File::open("server/var/words.txt").expect("File not found");
-        let mut contents: String = String::new();
+        let mut aes_handler: AES = rs_cryptography::aes_handler::AES::new();
 
-        file.read_to_string(&mut contents)
-            .expect("Error streaming file contents to String buffer");
+        // Plaintext file remains here only for demonstration purposes
+        aes_handler.encrypt_file("server/var/words.txt");
 
-        let secret_word: String = self::Hangman::choose_word(&contents);
+        let decrypted_words: String = aes_handler.decrypt_file(
+            "server/var/encrypted_words.txt");
+
+        let secret_word: String = self::Hangman::choose_word(&decrypted_words);
         let server_word: Vec<u8> = secret_word.into_bytes();
         let client_word: Vec<u8> = vec![95; server_word.len()];
 
@@ -148,8 +154,9 @@ impl Hangman {
             - (self.game_state.word_guesses)
     }
 
-    /// Returns the client word.
-    pub fn get_hint(&self) -> &Vec<u8> {
-        &self.client_word
-    }
+    /// Returns the hidden client word.
+    pub fn get_hint(&self) -> &Vec<u8> { &self.client_word }
+
+    /// Returns the revealed server word.
+    pub fn get_word(&self) -> &Vec<u8> { &self.server_word }
 }

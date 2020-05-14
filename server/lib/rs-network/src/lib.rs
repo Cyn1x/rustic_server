@@ -2,15 +2,16 @@
 //!
 //! `rs-network` initialises the server and listens for incoming requests,
 //! then processes them.
+
 mod request;
 mod response;
 
 use std::env;
-use std::net::{Ipv4Addr, SocketAddrV4, TcpListener};
-
-use openssl::ssl::{SslMethod, SslAcceptor, SslStream, SslFiletype};
+use std::net::{Ipv4Addr, SocketAddrV4, TcpListener, TcpStream};
 use std::sync::Arc;
-use std::thread;
+use std::time::Duration;
+
+use openssl::ssl::{SslAcceptor, SslMethod, SslFiletype, SslStream, SslAcceptorBuilder};
 
 use rs_concurrency;
 use rs_concurrency::ThreadPool;
@@ -25,12 +26,12 @@ pub fn initialise_connection() {
     let listener: TcpListener = TcpListener::bind(socket)
         .expect("Error creating TCP listener");
 
-    let mut acceptor = SslAcceptor::mozilla_intermediate(SslMethod::tls()).unwrap();
+    let mut acceptor: SslAcceptorBuilder = SslAcceptor::mozilla_intermediate(SslMethod::tls()).unwrap();
     acceptor.set_private_key_file("key.pem", SslFiletype::PEM).unwrap();
     acceptor.set_certificate_chain_file("cert.pem").unwrap();
     acceptor.check_private_key().unwrap();
 
-    let acceptor = Arc::new(acceptor.build());
+    let acceptor: Arc<SslAcceptor> = Arc::new(acceptor.build());
 
     println!("[Server]: Rustic Server is listening on port {}", port);
 
@@ -47,18 +48,28 @@ fn handle_connection(listener: &TcpListener, acceptor: &Arc<SslAcceptor>){
     for stream in listener.incoming() {
         match stream {
             Ok(stream) => {
-                let acceptor = acceptor.clone();
+                let acceptor: Arc<SslAcceptor> = acceptor.clone();
 
                 println!("[Server]: New client: {:?}", stream);
 
-                pool.execute( move || {
-                    let stream = acceptor.accept(stream).unwrap();
-                    request::handle_request(stream);
+                pool.execute(move || {
+                    handle_client(stream, &acceptor)
                 });
             }
-            Err(e) => println!("[Server]: Unable to get the new client: {:?}", e),
+            Err(e) => println!("[Server]: Unable to get new client: {:?}", e),
         }
     }
 
     println!("[Server]: Rustic Server is shutting down.");
+}
+
+fn handle_client(stream: TcpStream, acceptor: &Arc<SslAcceptor>) {
+    let timeout_duration: Duration = Duration::new(60, 0);
+
+    let stream: SslStream<TcpStream> = acceptor.accept(stream).unwrap();
+
+    stream.get_ref().set_read_timeout(Option::from(timeout_duration))
+        .expect("Failed to set the read timout.");
+
+    request::handle_request(stream);
 }

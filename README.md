@@ -66,9 +66,11 @@ ___
 * [x] Client initialisation
 * [x] Handle server and client communication
 * [x] Handle multiple concurrent connections
+* [x] TLS
 * [x] Thread pool to limit maximum connections
 * [ ] Serve web browsers
 * [x] Implement [Hangman](https://en.wikipedia.org/wiki/Hangman_(game) for manual testing
+* [ ] Anti-Cheat for both server and client
 * [x] Shell script to start the server on a given port
 * [x] Shell script with arguments to start client and connect to a host on a specific port
 * [x] Error handling

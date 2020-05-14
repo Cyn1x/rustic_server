@@ -3,12 +3,14 @@
 //! `rs-handler` initialises Hangman game and processes the state at each
 //! stage of the game.
 
+use rs_cryptography::bcrypt_handler;
 use rs_game;
 use rs_game::Hangman;
 
 pub struct Handler {
     game: rs_game::Hangman,
-    response: Vec<u8>
+    response: Vec<u8>,
+    hash: Vec<u8>
 }
 
 impl Handler {
@@ -31,10 +33,12 @@ impl Handler {
     pub fn new() -> Handler {
         let game: Hangman = Hangman::new();
         let response: Vec<u8> = Vec::new();
+        let hash: Vec<u8> = Vec::new();
 
         Handler {
             game,
-            response
+            response,
+            hash
         }
     }
 
@@ -56,26 +60,39 @@ impl Handler {
     /// Returns a vector containing the word hint in ASCII, with the underscores encoded in ASCII.
     fn new_game(&mut self) -> &[u8] {
         let response: Vec<u8> = self.game.get_hint().clone();
-        return self.handle_response(response)
+        self.handle_response(response);
+        return &self.response
+    }
+
+    fn new_hash(&mut self) -> &Vec<u8> {
+        let response: Vec<u8> = self.game.get_word().clone();
+
+        println!("[Server]: Hashing chosen word.");
+
+        self.hash = bcrypt_handler::hash_data(&response);
+        self.handle_response(response);
+        return &self.hash
     }
 
     /// Central function that handles incoming and outgoing transmissions. The function determines
     /// whether the client has requests a new game, or sent a valid request. The `CRLF` or `NL`
     /// bytes get stripped from the buffer. Returns the response.
     pub fn handle_request<'a>(&'a mut self, buffer: &'a Vec<u8>) -> &'a [u8] {
-        let start_msg = b"START GAME\n";
-        let invalid_msg = b"Invalid input detected\n";
+        let start_msg: &[u8] = b"START GAME\n";
+        let hash_msg: &[u8] = b"HASH RECEIVED";
+        let invalid_msg: &[u8] = b"Invalid input detected\n";
 
         if self.request_empty(buffer) { return invalid_msg }
-
-        if buffer.starts_with(start_msg) { return self.new_game() }
 
         let split_buffer: Vec<u8> = buffer.split(|&b | b == 13 || b == 10)
             .next().unwrap().to_vec();
 
+        if buffer.starts_with(start_msg) { return self.new_hash() }
+        else if buffer.starts_with(hash_msg) { return self.new_game() }
+
         if self.request_invalid(&split_buffer) { return invalid_msg }
 
-        let response = self.game.verify_guess(&split_buffer).clone();
+        let response: Vec<u8> = self.game.verify_guess(&split_buffer).clone();
         self.handle_response(response)
     }
 
