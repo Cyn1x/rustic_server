@@ -3,9 +3,6 @@
 //! `rs-hangman` initialises Hangman game and processes the state at each
 //! stage of the game.
 
-use std::fs::File;
-use std::io::prelude::*;
-
 use rand::Rng;
 
 use rs_cryptography;
@@ -30,8 +27,8 @@ impl Hangman {
     /// # Arguments
     ///
     /// * `server_word` - An 8-bit unsigned integer vector that contains the secret word
-    /// * `client_word` - An 8-bit unsigned inteneger vector that contains the hidden word
-    /// * `game_state`  - Contains the gane state data
+    /// * `client_word` - An 8-bit unsigned integer vector that contains the hidden word
+    /// * `game_state`  - Contains the game state data
     ///
     /// # Example
     ///
