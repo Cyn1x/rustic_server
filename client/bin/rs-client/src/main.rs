@@ -13,15 +13,13 @@ use std::borrow::Cow;
 use openssl::ssl::{SslConnector, SslMethod, SslStream, SslConnectorBuilder};
 
 use rs_cryptography::bcrypt_handler;
-use std::str::from_utf8;
 
 /// The game state data
 struct State {
     word_length: usize,
     word_hash: Vec<u8>,
     char_guesses: i32,
-    word_guesses: i32,
-    score: i32
+    word_guesses: i32
 }
 
 /// Initialises the client by connecting to the server. The function then calls another
@@ -41,15 +39,14 @@ fn main() {
     let start_msg: &[u8] = b"START GAME\n";
 
     let (
-        word_length, word_hash, char_guesses, word_guesses, score
-    ) = (0, Vec::new(), 0, 0, 0);
+        word_length, word_hash, char_guesses, word_guesses
+    ) = (0, Vec::new(), 0, 0);
 
     let mut game_state = State {
         word_length,
         word_hash,
         char_guesses,
-        word_guesses,
-        score
+        word_guesses
     };
 
     stream.write_all(start_msg).expect("Error writing to stream");
